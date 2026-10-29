@@ -1,21 +1,17 @@
 name: CrossMix-OS Release
-
 permissions:
   id-token: "write"
   contents: "write"
   packages: "write"
   pull-requests: "read"
-
 on:
   push:
     tags:
       - v*
-
 jobs:
   tagged-release:
     name: Tagged release
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
       - name: Get version
@@ -43,17 +39,16 @@ jobs:
           ls -la /home/runner/work/CrossMix-OS/CrossMix-OS
           cd /home/runner/work/CrossMix-OS/CrossMix-OS
           /usr/local/bin/7zz a RetroArch/default_config.7z RetroArch/retroarch.cfg RetroArch/.retroarch/config/*
-    - name: Zipping release
-  run: |
-    shopt -s dotglob
-    cd /home/runner/work/CrossMix-OS/CrossMix-OS
-    7zz a -mx=1 -v1900m "/home/runner/work/CrossMix-OS/CrossMix-OS_v${{ env.BUILD_VERSION }}.7z" ./*
-- name: Create Release
-  uses: softprops/action-gh-release@v2
-  with:
-    tag_name: v${{ env.BUILD_VERSION }}
-    name: "CrossMix-OS v${{ env.BUILD_VERSION }}"
-    files: /home/runner/work/CrossMix-OS/CrossMix-OS_v*.7z.*
-    draft: false
-    prerelease: false
-
+      - name: Zipping release
+        run: |
+          shopt -s dotglob
+          cd /home/runner/work/CrossMix-OS/CrossMix-OS
+          7zz a -mx=1 -v1900m "/home/runner/work/CrossMix-OS/CrossMix-OS_v${{ env.BUILD_VERSION }}.7z" ./*
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ env.BUILD_VERSION }}
+          name: "CrossMix-OS v${{ env.BUILD_VERSION }}"
+          files: /home/runner/work/CrossMix-OS/CrossMix-OS_v*.7z.*
+          draft: false
+          prerelease: false
